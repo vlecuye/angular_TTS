@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 import { IVoice } from './voice';
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,6 @@ export class TtsService {
 
    callTTS(value:string,ssml:boolean,currentVoice:string){
     console.log("CALLING TTS!");
-    console.log(ssml);
     let languageCode = currentVoice.split('-',2).join('-');
     const request: any = {
       // Select the text to synthesize
@@ -22,11 +22,21 @@ export class TtsService {
     };
     ssml ? request.input = {ssml:value} : request.input = {text:value};
     console.log(request);
-    return this.httpClient.post("https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=",request);
+    return this.httpClient.post(this.buildTTSRequest("/v1/text:synthesize"), request);
    }
 
    getVoiceList(){
     console.log("GETTING VOICES!");
-    return this.httpClient.get("https://texttospeech.googleapis.com/v1/voices?key=");
+    return this.httpClient.get(this.buildTTSRequest("/v1/voices"));
+   }
+
+   buildTTSRequest(method : string){
+    var url = environment.url + method;
+    if (environment.apiKey)
+    {
+      url = url + "?key=" + environment.apiKey
+       }
+
+      return url
    }
 }

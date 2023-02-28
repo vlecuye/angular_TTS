@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
     console.log("SENDING REQUEST!")
     console.log(value);
     this.message = "Request currently being processed."
-    this.tts.callSTT(value, this.ssml,this.currentVoice).subscribe(
+    this.tts.callTTS(value, this.ssml,this.currentVoice).subscribe(
       {
         next: (result) => { console.log(result); this.message = "TTS Request succesful."; this.audio = result;this.audiocontent =  "data:audio/mp3;base64," + this.audio.audioContent; },
         error: (error) => { console.error(error.error.error.message); this.message = "An Error has occured, please see logs for details."; }
